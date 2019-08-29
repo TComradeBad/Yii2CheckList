@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -76,6 +77,7 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+        $model->setScenario(LoginForm::SCENARIO_LOGIN);
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
@@ -114,6 +116,22 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @return string|Response
+     */
+    public function actionRegister()
+    {
+        $user = new LoginForm();
+        $user->setScenario(LoginForm::SCENARIO_REGISTER);
+
+        if ($user->load(\Yii::$app->request->post()) && $user->validate()) {
+            $user->register();
+            return $this->goHome();
+        }
+        return $this->render('register', ["model" => $user]);
+
     }
 
     /**

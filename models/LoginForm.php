@@ -14,11 +14,14 @@ use yii\base\Model;
 class LoginForm extends Model
 {
     public $username;
+    public $email;
     public $password;
     public $rememberMe = true;
 
     private $_user = false;
 
+    const SCENARIO_LOGIN = "login";
+    const SCENARIO_REGISTER = "register";
 
     /**
      * @return array the validation rules.
@@ -26,14 +29,18 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+
+            ["email", "email"],
+            ["rememberMe", "boolean"],
+
+            [["username", "email", "password"], "required", "on" => self::SCENARIO_REGISTER],
+            [["email","username"],"isUnique","on"=>self::SCENARIO_REGISTER],
+            [["username", "password"], "required", "on" => self::SCENARIO_LOGIN],
+            ['password', 'validatePassword', "on" => self::SCENARIO_LOGIN],
+
         ];
     }
+
 
     /**
      * Validates the password.
@@ -53,6 +60,17 @@ class LoginForm extends Model
         }
     }
 
+    public function isUnique($attribute, $params)
+    {
+        if(!$this->hasErrors()){
+            $user = new User($this->getAttributes(["username","email","password"]));
+            if(!$user->validate()){
+                $this->addError($attribute,"User or email already exist");
+            }
+        }
+    }
+
+
     /**
      * Logs in a user using the provided username and password.
      * @return bool whether the user is logged in successfully
@@ -60,9 +78,22 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
+    }
+
+    /**
+     * creates new user after registration
+     * @return User
+     */
+    public function register()
+    {
+        if($this->validate()){
+            $user = new User($this->getAttributes(["username","email","password"]));
+            $user->save();
+        }
+        return $user;
     }
 
     /**

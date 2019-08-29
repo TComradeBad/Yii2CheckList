@@ -3,35 +3,23 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use Yii;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
-    const SCENARIO_LOGIN = "login";
-    const SCENARIO_REGISTER = "register";
 
-    public function scenarios()
-    {
-        return [
-            self::SCENARIO_LOGIN => ["email", "password"],
-            self::SCENARIO_REGISTER => ["username", "email", "password"]
-        ];
-    }
-
-    public function rules()
-    {
-        return [
-            [["username","email","password"],"required"],
-            [["username","email"],"unique"],
-            ["email","email"]
-
-        ];
-    }
 
     public static function tableName()
     {
         return 'users';
     }
 
+    public function rules()
+    {
+        return [
+          [["email","username"],"unique"]
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -111,4 +99,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         }
         return false;
     }
+
+
+
+
 }
