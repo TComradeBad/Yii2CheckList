@@ -30,20 +30,23 @@ class m190828_160322_users_table extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable("users", [
-            "id" => $this->primaryKey(),
-            "username" => $this->string()->notNull()->unique(),
-            "email"=>$this->string()->notNull()->unique(),
-            "password"=>$this->string()->notNull(),
-            "auth_key" => $this->string(),
-            "banned" => $this->boolean()->defaultValue("0"),
-            "created_at"=>$this->timestamp()
-        ]);
+        $this->createTable("user",
+            [
+                "id" => $this->primaryKey(),
+                "username" => $this->string()->notNull()->unique(),
+                "email" => $this->string()->notNull()->unique(),
+                "password" => $this->string()->notNull(),
+                "auth_key" => $this->string(),
+                "banned" => $this->boolean()->defaultValue("0"),
+                "max_check_list_count" => $this->integer()->defaultValue("15"),
+                "max_check_list_item_count" => $this->integer()->defaultValue("10"),
+                "created_at" => $this->timestamp()
+            ]);
     }
 
     public function down()
     {
-        $this->dropTable("users");
+        $this->dropTable("user");
 
     }
 
