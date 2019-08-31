@@ -34,7 +34,7 @@ class LoginForm extends Model
             ["rememberMe", "boolean"],
 
             [["username", "email", "password"], "required", "on" => self::SCENARIO_REGISTER],
-            [["email","username"],"isUnique","on"=>self::SCENARIO_REGISTER],
+            [["email", "username"], "isUnique", "on" => self::SCENARIO_REGISTER],
             [["username", "password"], "required", "on" => self::SCENARIO_LOGIN],
             ['password', 'validatePassword', "on" => self::SCENARIO_LOGIN],
 
@@ -62,10 +62,10 @@ class LoginForm extends Model
 
     public function isUnique($attribute, $params)
     {
-        if(!$this->hasErrors()){
-            $user = new User($this->getAttributes(["username","email","password"]));
-            if(!$user->validate()){
-                $this->addError($attribute,"User or email already exist");
+        if (!$this->hasErrors()) {
+            $user = new User($this->getAttributes(["username", "email", "password"]));
+            if (!$user->validate()) {
+                $this->addError($attribute, "User or email already exist");
             }
         }
     }
@@ -89,8 +89,9 @@ class LoginForm extends Model
      */
     public function register()
     {
-        if($this->validate()){
-            $user = new User($this->getAttributes(["username","email","password"]));
+        if ($this->validate()) {
+            $this->setAttributes(["password" => password_hash($this->password, PASSWORD_BCRYPT)]);
+            $user = new User($this->getAttributes(["username", "email", "password"]));
             $user->save();
         }
         return $user;

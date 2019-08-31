@@ -10,9 +10,17 @@ return [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
+        'urlManager' => [
+            "class" => "\yii\web\UrlManager",
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                ["class" => 'yii\rest\UrlRule', "controller" => ["api/user"]]
+                ],
+            ],
 
-    ],
-    'params' => [
-        // список параметров
-    ],
-];
+        ],
+        'params' => [
+            // список параметров
+        ],
+    ];
