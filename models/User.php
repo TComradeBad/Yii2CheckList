@@ -20,6 +20,25 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
+    public function fields()
+    {
+        return [
+            "username",
+            "email",
+            "banned",
+            "max_check_list_count",
+            "max_check_list_item_count",
+
+        ];
+    }
+
+    public function extraFields()
+    {
+        return [
+            "checklists"
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -80,7 +99,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return password_verify($password,$this->password);
+        return password_verify($password, $this->password);
     }
 
     /**
@@ -103,7 +122,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCheckLists()
+    public function getChecklists()
     {
         return $this->hasMany(CheckList::className(), ["user_id" => "id"]);
     }

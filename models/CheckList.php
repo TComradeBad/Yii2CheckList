@@ -23,6 +23,21 @@ class CheckList extends \yii\db\ActiveRecord
     {
         return 'check_list';
     }
+    public function fields()
+    {
+        return [
+            "name",
+            "user_id",
+            "done"
+        ];
+    }
+
+    public function extraFields()
+    {
+        return [
+            "items"
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -60,7 +75,7 @@ class CheckList extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCheckListItems()
+    public function getItems()
     {
         return $this->hasMany(CheckListItem::className(), ["check_list_id" => "id"]);
     }

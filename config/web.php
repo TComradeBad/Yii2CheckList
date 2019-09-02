@@ -49,11 +49,24 @@ $config = [
 
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
-                ["class" => 'yii\rest\UrlRule', "controller" =>  ["api/user"]],
-                ["class" => 'yii\rest\UrlRule', "controller" =>  ["api/check-list"]],
-                ["class" => 'yii\rest\UrlRule', "controller" =>  ["api/check-list-item"]]
+                [
+                    "class" => 'yii\rest\UrlRule',
+                    "controller" => ["api/user"],
+                    "pluralize" => false
+                ],
+                [
+                    "class" => 'yii\rest\UrlRule',
+                    "controller" => ["api/check-list"],
+                    "pluralize" => false
+                ],
+                [
+                    "class" => 'yii\rest\UrlRule',
+                    "controller" => ["api/check-list-item"],
+                    "pluralize" => false
+                ]
 
             ],
         ],
@@ -78,6 +91,6 @@ if (YII_ENV_DEV) {
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
-$config ["modules"]['api']= ["class" => "app\modules\Api\Api"];
+$config ["modules"]['api'] = ["class" => "app\modules\Api\Api"];
 
 return $config;

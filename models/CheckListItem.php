@@ -25,6 +25,15 @@ class CheckListItem extends \yii\db\ActiveRecord
         return 'check_list_item';
     }
 
+    public function fields()
+    {
+        return [
+            "name",
+            "check_list_id",
+            "done"
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
